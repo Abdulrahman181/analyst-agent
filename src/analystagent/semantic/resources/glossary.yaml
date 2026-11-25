@@ -1,0 +1,160 @@
+notes:
+  - "Answer in the language of the question. Names stored in the database are English; quote them exactly as stored."
+  - "Dates are text in the form 'YYYY-MM-DD HH:MM:SS'. Use strftime('%Y', InvoiceDate) for the year and strftime('%Y-%m', InvoiceDate) for the month."
+  - "The data covers 2021-01-01 to 2025-12-22. Never assume today's date; resolve relative periods against the data or ask for an explicit year."
+  - "The database has no cost, profit, salary, stock or listening-history data."
+
+entries:
+  - id: revenue
+    kind: metric
+    terms_en: [revenue, sales, income, turnover, total sales, earnings, billed]
+    terms_ar: [الإيرادات, إيرادات, ايرادات, مبيعات, المبيعات, دخل, إجمالي المبيعات]
+    meaning: "Revenue = SUM(Invoice.Total). It equals SUM(InvoiceLine.UnitPrice * InvoiceLine.Quantity); use InvoiceLine only when breaking down by track, album, artist or genre."
+
+  - id: units_sold
+    kind: metric
+    terms_en: [units sold, tracks sold, copies, quantity sold, items sold]
+    terms_ar: [الوحدات المباعة, عدد المقاطع المباعة, الكمية المباعة, عدد الأغاني المباعة]
+    meaning: "Units sold = SUM(InvoiceLine.Quantity)."
+
+  - id: average_order
+    kind: metric
+    terms_en: [average order, average invoice, average order value, average basket]
+    terms_ar: [متوسط الفاتورة, متوسط قيمة الفاتورة, متوسط الطلب]
+    meaning: "Average order value = AVG(Invoice.Total)."
+
+  - id: customer
+    kind: entity
+    terms_en: [customer, customers, client, clients, buyer]
+    terms_ar: [عميل, عملاء, العملاء, زبون, زبائن, الزبائن]
+    meaning: "Customer table. A customer's country is Customer.Country; Customer.SupportRepId points to Employee.EmployeeId."
+
+  - id: invoice
+    kind: entity
+    terms_en: [invoice, invoices, order, orders, purchase, purchases]
+    terms_ar: [فاتورة, فواتير, الفواتير, طلب, طلبات, مشتريات]
+    meaning: "An order is one row of Invoice. Its lines are in InvoiceLine. Revenue by country uses Invoice.BillingCountry."
+
+  - id: track
+    kind: entity
+    terms_en: [track, tracks, song, songs]
+    terms_ar: [أغنية, أغاني, الأغاني, مقطع, مقاطع, المقاطع, مسار]
+    meaning: "Track table. Track.Name is the title; Track.Milliseconds is the length (minutes = Milliseconds / 60000.0)."
+
+  - id: artist
+    kind: entity
+    terms_en: [artist, artists, band, bands, singer]
+    terms_ar: [فنان, فنانين, الفنانين, مغني, مطرب, فرقة]
+    meaning: "Artist table. Join Artist -> Album -> Track through ArtistId and AlbumId."
+
+  - id: album
+    kind: entity
+    terms_en: [album, albums]
+    terms_ar: [ألبوم, ألبومات, الألبومات, البوم]
+    meaning: "Album table. Album.Title is the name."
+
+  - id: genre
+    kind: entity
+    terms_en: [genre, genres]
+    terms_ar: [نوع موسيقي, الأنواع الموسيقية, نوع, أنواع, تصنيف]
+    meaning: "Genre table joined from Track.GenreId. Genre.Name is the label."
+
+  - id: playlist
+    kind: entity
+    terms_en: [playlist, playlists]
+    terms_ar: [قائمة تشغيل, قوائم التشغيل, قوائم]
+    meaning: "Playlist table. Membership is in PlaylistTrack."
+
+  - id: employee
+    kind: entity
+    terms_en: [employee, employees, staff, support rep, sales agent, manager]
+    terms_ar: [موظف, موظفين, الموظفين, ممثل الدعم, مدير]
+    meaning: "Employee table. ReportsTo points to the manager's EmployeeId; Customer.SupportRepId links customers to their support representative."
+
+  - id: duration
+    kind: metric
+    terms_en: [duration, length, longest, shortest, minutes]
+    terms_ar: [مدة, المدة, أطول, أقصر, دقائق]
+    meaning: "Track length is Track.Milliseconds. Convert in SQL, for example ROUND(Milliseconds / 60000.0, 2) for minutes."
+
+  - id: country_customers
+    kind: dimension
+    terms_en: [customers by country, customers per country, customer country]
+    terms_ar: [عملاء كل دولة, العملاء حسب الدولة, دولة العميل]
+    meaning: "Use Customer.Country for customer counts and Invoice.BillingCountry for revenue by country."
+
+  - id: v_usa
+    kind: value
+    terms_en: [usa, united states, america]
+    terms_ar: [الولايات المتحدة, أمريكا, امريكا, الولايات المتحده]
+    meaning: "Country value 'USA' (Customer.Country, Invoice.BillingCountry)."
+  - id: v_uk
+    kind: value
+    terms_en: [uk, united kingdom, britain]
+    terms_ar: [المملكة المتحدة, بريطانيا]
+    meaning: "Country value 'United Kingdom'."
+  - id: v_germany
+    kind: value
+    terms_en: [germany]
+    terms_ar: [ألمانيا, المانيا]
+    meaning: "Country value 'Germany'."
+  - id: v_france
+    kind: value
+    terms_en: [france]
+    terms_ar: [فرنسا]
+    meaning: "Country value 'France'."
+  - id: v_brazil
+    kind: value
+    terms_en: [brazil]
+    terms_ar: [البرازيل]
+    meaning: "Country value 'Brazil'."
+  - id: v_canada
+    kind: value
+    terms_en: [canada]
+    terms_ar: [كندا]
+    meaning: "Country value 'Canada'."
+  - id: v_india
+    kind: value
+    terms_en: [india]
+    terms_ar: [الهند]
+    meaning: "Country value 'India'."
+  - id: v_czech
+    kind: value
+    terms_en: [czech republic, czechia]
+    terms_ar: [التشيك, تشيكيا]
+    meaning: "Country value 'Czech Republic'."
+  - id: v_portugal
+    kind: value
+    terms_en: [portugal]
+    terms_ar: [البرتغال]
+    meaning: "Country value 'Portugal'."
+  - id: v_rock
+    kind: value
+    terms_en: [rock]
+    terms_ar: [روك, الروك]
+    meaning: "Genre.Name value 'Rock'."
+  - id: v_jazz
+    kind: value
+    terms_en: [jazz]
+    terms_ar: [جاز, الجاز]
+    meaning: "Genre.Name value 'Jazz'."
+  - id: v_metal
+    kind: value
+    terms_en: [metal]
+    terms_ar: [ميتال, الميتال]
+    meaning: "Genre.Name value 'Metal' (there is also a separate 'Heavy Metal' genre)."
+  - id: v_latin
+    kind: value
+    terms_en: [latin]
+    terms_ar: [لاتيني, لاتين, الموسيقى اللاتينية]
+    meaning: "Genre.Name value 'Latin'."
+  - id: v_classical
+    kind: value
+    terms_en: [classical]
+    terms_ar: [كلاسيكي, الكلاسيكية, كلاسيكية]
+    meaning: "Genre.Name value 'Classical'."
+  - id: v_pop
+    kind: value
+    terms_en: [pop]
+    terms_ar: [بوب, البوب]
+    meaning: "Genre.Name value 'Pop'."

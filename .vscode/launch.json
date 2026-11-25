@@ -1,0 +1,56 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "AnalystAgent: selfcheck (no LLM)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "analystagent",
+      "args": ["selfcheck"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "AnalystAgent: ask (uses .env)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "analystagent",
+      "args": ["ask", "${input:question}"],
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "AnalystAgent: API server (uses .env)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "analystagent",
+      "args": ["serve"],
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "AnalystAgent: evaluation, agent mode (uses .env)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "analystagent",
+      "args": ["eval", "--mode", "agent"],
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Pytest: current file",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${file}"],
+      "console": "integratedTerminal"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "question",
+      "type": "promptString",
+      "description": "Question in English or Arabic",
+      "default": "Which five countries have the highest total revenue?"
+    }
+  ]
+}
